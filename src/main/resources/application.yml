@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: ms-ticket-manager
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:admin@clusterevent.7ysylg7.mongodb.net/?retryWrites=true&w=majority&appName=ClusterEvent
+      database: db_ticket
+
+server:
+  port: 8081
+
+ms:
+  event:
+    url: http://localhost:8080/api/v1/events
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
