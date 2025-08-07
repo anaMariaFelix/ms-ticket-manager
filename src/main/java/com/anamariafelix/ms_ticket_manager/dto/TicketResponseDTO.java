@@ -1,5 +1,6 @@
 package com.anamariafelix.ms_ticket_manager.dto;
 
+import com.anamariafelix.ms_ticket_manager.client.model.Event;
 import com.anamariafelix.ms_ticket_manager.enums.Status;
 import lombok.*;
 
@@ -16,9 +17,7 @@ public class TicketResponseDTO {
 
     private String customerMail;
 
-    private String eventId;
-
-    private String eventName;
+    private Event event;
 
     private String BRLTotalAmount;
 
