@@ -42,4 +42,10 @@ public class TicketService {
             throw new OpenFeignConectionException("Error communicating with event service.");
         }
     }
+
+    @Transactional(readOnly = true)
+    public Ticket fidById(String id){
+        return ticketRepository.findById(id).orElseThrow(
+                () -> new EventNotFoundException(String.format("Ticket with id = %s not found!", id)));
+    }
 }
