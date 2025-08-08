@@ -28,13 +28,13 @@ public class TicketController {
         return ResponseEntity.status(201).body(toTicketDTO(ticket));
     }
 
-    @GetMapping("/get-event/{id}")
+    @GetMapping("/get-ticket/{id}")
     public ResponseEntity<TicketResponseDTO> findById(@PathVariable String id) {
         Ticket ticket = ticketService.fidById(id);
         return ResponseEntity.ok().body(toTicketDTO(ticket));
     }
 
-    @GetMapping("/get-event-cpf/{cpf}")
+    @GetMapping("/get-ticket-cpf/{cpf}")
     public ResponseEntity<TicketResponseDTO> findByCpf(@PathVariable String cpf) {
         Ticket ticket = ticketService.findByCpf(cpf);
         return ResponseEntity.ok().body(toTicketDTO(ticket));
@@ -44,5 +44,11 @@ public class TicketController {
     public ResponseEntity<TicketResponseDTO> update(@PathVariable String id, @RequestBody @Valid TicketUpdateDTO ticketUpdateDTO) {
         Ticket ticket = ticketService.update(id, ticketUpdateDTO);
         return ResponseEntity.ok().body(toTicketDTO(ticket));
+    }
+
+    @DeleteMapping("/delete-ticket/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        ticketService.deleteTicket(id);
+        return ResponseEntity.noContent().build();
     }
 }

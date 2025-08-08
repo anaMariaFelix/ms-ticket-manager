@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 import static com.anamariafelix.ms_ticket_manager.client.mapper.EventMapper.toEvent;
 import static com.anamariafelix.ms_ticket_manager.mapper.TicketMapper.toTicket;
 
@@ -48,13 +50,13 @@ public class TicketService {
 
     @Transactional(readOnly = true)
     public Ticket fidById(String id){
-        return ticketRepository.findById(id).orElseThrow(
+        return ticketRepository.findByTicketIdAndDeletedFalse(id).orElseThrow(
                 () -> new TicketNotFoundException(String.format("Ticket with id = %s not found!", id)));
     }
 
     @Transactional(readOnly = true)
     public Ticket findByCpf(String cpf) {
-        return ticketRepository.findByCpf(cpf).orElseThrow(
+        return ticketRepository.findByCpfAndDeletedFalse(cpf).orElseThrow(
                 () -> new TicketNotFoundException(String.format("Ticket with user CPF = %s not found!", cpf)));
     }
 
@@ -72,5 +74,14 @@ public class TicketService {
         }
 
         return ticketRepository.save(ticket);
+    }
+
+    public void deleteTicket(String id) {
+        Ticket ticket = ticketRepository.findByTicketIdAndDeletedFalse(id).orElseThrow(
+                () -> new TicketNotFoundException(String.format("Ticket with id = %s not found!", id)));
+
+        ticket.setDeleted(true);
+        ticket.setDeletedAt(LocalDateTime.now());
+        ticketRepository.save(ticket);
     }
 }

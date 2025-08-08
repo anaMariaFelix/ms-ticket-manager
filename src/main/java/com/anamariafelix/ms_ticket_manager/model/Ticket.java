@@ -10,6 +10,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -33,4 +35,8 @@ public class Ticket {
     private String USDTotalAmount;
 
     private Status status;
+
+    private boolean deleted = false;
+
+    private LocalDateTime deletedAt;
 }
