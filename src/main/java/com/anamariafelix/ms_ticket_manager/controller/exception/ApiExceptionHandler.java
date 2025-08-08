@@ -1,9 +1,6 @@
 package com.anamariafelix.ms_ticket_manager.controller.exception;
 
-import com.anamariafelix.ms_ticket_manager.exception.EventNotFoundException;
-import com.anamariafelix.ms_ticket_manager.exception.OpenFeignConectionException;
-import com.anamariafelix.ms_ticket_manager.exception.TicketNotFoundException;
-import com.anamariafelix.ms_ticket_manager.exception.UnableToUpdateTicketexception;
+import com.anamariafelix.ms_ticket_manager.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +53,14 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorMessage> unableToUpdateTicketexception(UnableToUpdateTicketexception e,HttpServletRequest request) {
         log.error("Api Error - ", e);
         return ResponseEntity.status(HttpStatus.CONFLICT)//409
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
+    }
+
+    @ExceptionHandler(UniqueViolationException.class)
+    public ResponseEntity<ErrorMessage> emailUniqueViolationException(UniqueViolationException e, HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
     }
