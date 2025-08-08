@@ -3,9 +3,11 @@ package com.anamariafelix.ms_ticket_manager.service;
 import com.anamariafelix.ms_ticket_manager.client.EventClientOpenFeign;
 import com.anamariafelix.ms_ticket_manager.client.dto.EventDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
+import com.anamariafelix.ms_ticket_manager.dto.TicketUpdateDTO;
 import com.anamariafelix.ms_ticket_manager.exception.EventNotFoundException;
 import com.anamariafelix.ms_ticket_manager.exception.OpenFeignConectionException;
 import com.anamariafelix.ms_ticket_manager.exception.TicketNotFoundException;
+import com.anamariafelix.ms_ticket_manager.exception.UnableToUpdateTicketexception;
 import com.anamariafelix.ms_ticket_manager.model.Ticket;
 import com.anamariafelix.ms_ticket_manager.repository.TicketRepository;
 import feign.FeignException;
@@ -50,8 +52,25 @@ public class TicketService {
                 () -> new TicketNotFoundException(String.format("Ticket with id = %s not found!", id)));
     }
 
+    @Transactional(readOnly = true)
     public Ticket findByCpf(String cpf) {
         return ticketRepository.findByCpf(cpf).orElseThrow(
                 () -> new TicketNotFoundException(String.format("Ticket with user CPF = %s not found!", cpf)));
+    }
+
+    @Transactional
+    public Ticket update(String id, TicketUpdateDTO ticketUpdate) {
+        Ticket ticket = fidById(id);
+
+        if (ticket.getCpf() == null) {
+            ticket.setStatus(ticketUpdate.getStatus());
+            ticket.setUSDTotalAmount(ticketUpdate.getUsdTotalAmount());
+            ticket.setBRLTotalAmount(ticketUpdate.getBrlTotalAmount());
+
+        }else {
+            throw new UnableToUpdateTicketexception("Tickets that have been sold cannot be updated.");
+        }
+
+        return ticketRepository.save(ticket);
     }
 }
