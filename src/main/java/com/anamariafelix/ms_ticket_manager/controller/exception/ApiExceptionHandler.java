@@ -64,4 +64,20 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
     }
+
+    @ExceptionHandler(TicketUnavailableException.class)
+    public ResponseEntity<ErrorMessage> TicketUnavailableException(TicketUnavailableException e, HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, e.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorMessage> userNotFoundException(UserNotFoundException e, HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, e.getMessage()));
+    }
 }
