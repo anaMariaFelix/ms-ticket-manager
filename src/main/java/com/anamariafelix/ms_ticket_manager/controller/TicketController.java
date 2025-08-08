@@ -10,8 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.anamariafelix.ms_ticket_manager.mapper.TicketMapper.toTicket;
-import static com.anamariafelix.ms_ticket_manager.mapper.TicketMapper.toTicketDTO;
+import java.util.List;
+
+import static com.anamariafelix.ms_ticket_manager.mapper.TicketMapper.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -35,9 +36,9 @@ public class TicketController {
     }
 
     @GetMapping("/get-ticket-cpf/{cpf}")
-    public ResponseEntity<TicketResponseDTO> findByCpf(@PathVariable String cpf) {
-        Ticket ticket = ticketService.findByCpf(cpf);
-        return ResponseEntity.ok().body(toTicketDTO(ticket));
+    public ResponseEntity<List<TicketResponseDTO>> findByCpf(@PathVariable String cpf) {
+        List<Ticket> tickets = ticketService.findByCpf(cpf);
+        return ResponseEntity.ok().body(toListTicketDTO(tickets));
     }
 
     @PutMapping("/update-ticket/{id}")

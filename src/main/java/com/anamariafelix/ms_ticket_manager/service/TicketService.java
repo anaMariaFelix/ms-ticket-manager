@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.anamariafelix.ms_ticket_manager.client.mapper.EventMapper.toEvent;
 import static com.anamariafelix.ms_ticket_manager.mapper.TicketMapper.toTicket;
@@ -55,9 +56,8 @@ public class TicketService {
     }
 
     @Transactional(readOnly = true)
-    public Ticket findByCpf(String cpf) {
-        return ticketRepository.findByCpfAndDeletedFalse(cpf).orElseThrow(
-                () -> new TicketNotFoundException(String.format("Ticket with user CPF = %s not found!", cpf)));
+    public List<Ticket> findByCpf(String cpf) {
+        return ticketRepository.findByCpfAndDeletedFalse(cpf);
     }
 
     @Transactional
