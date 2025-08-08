@@ -31,4 +31,10 @@ public class TicketController {
         Ticket ticket = ticketService.fidById(id);
         return ResponseEntity.ok().body(toTicketDTO(ticket));
     }
+
+    @GetMapping("/get-event-cpf/{cpf}")
+    public ResponseEntity<TicketResponseDTO> findByCpf(@PathVariable String cpf) {
+        Ticket ticket = ticketService.findByCpf(cpf);
+        return ResponseEntity.ok().body(toTicketDTO(ticket));
+    }
 }
