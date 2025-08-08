@@ -5,6 +5,7 @@ import com.anamariafelix.ms_ticket_manager.client.dto.EventDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.exception.EventNotFoundException;
 import com.anamariafelix.ms_ticket_manager.exception.OpenFeignConectionException;
+import com.anamariafelix.ms_ticket_manager.exception.TicketNotFoundException;
 import com.anamariafelix.ms_ticket_manager.model.Ticket;
 import com.anamariafelix.ms_ticket_manager.repository.TicketRepository;
 import feign.FeignException;
@@ -46,6 +47,11 @@ public class TicketService {
     @Transactional(readOnly = true)
     public Ticket fidById(String id){
         return ticketRepository.findById(id).orElseThrow(
-                () -> new EventNotFoundException(String.format("Ticket with id = %s not found!", id)));
+                () -> new TicketNotFoundException(String.format("Ticket with id = %s not found!", id)));
+    }
+
+    public Ticket findByCpf(String cpf) {
+        return ticketRepository.findByCpf(cpf).orElseThrow(
+                () -> new TicketNotFoundException(String.format("Ticket with user CPF = %s not found!", cpf)));
     }
 }
