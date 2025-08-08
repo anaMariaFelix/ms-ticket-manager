@@ -36,8 +36,14 @@ public class TicketController {
     }
 
     @GetMapping("/get-ticket-cpf/{cpf}")
-    public ResponseEntity<List<TicketResponseDTO>> findByCpf(@PathVariable String cpf) {
-        List<Ticket> tickets = ticketService.findByCpf(cpf);
+    public ResponseEntity<List<TicketResponseDTO>> findAllCpf(@PathVariable String cpf) {
+        List<Ticket> tickets = ticketService.findAllCpf(cpf);
+        return ResponseEntity.ok().body(toListTicketDTO(tickets));
+    }
+
+    @GetMapping("/get-ticket-eventId/{eventId}")
+    public ResponseEntity<List<TicketResponseDTO>> findAllEventId(@PathVariable String eventId) {
+        List<Ticket> tickets = ticketService.findAllEventId(eventId);
         return ResponseEntity.ok().body(toListTicketDTO(tickets));
     }
 
@@ -50,6 +56,12 @@ public class TicketController {
     @DeleteMapping("/delete-ticket/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         ticketService.deleteTicket(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/delete-ticket-cpf/{cpf}")
+    public ResponseEntity<Void> deleteByCpf(@PathVariable String cpf) {
+        ticketService.deleteTicketByCpf(cpf);
         return ResponseEntity.noContent().build();
     }
 }
