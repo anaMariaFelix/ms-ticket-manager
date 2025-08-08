@@ -10,15 +10,11 @@ import org.hibernate.validator.constraints.br.CPF;
 @NoArgsConstructor
 public class TicketBuyCreateDTO {
 
+    @NotBlank(message = "The cpf must be informed")
     private String ticketId;
 
     @NotBlank(message = "The cpf must be informed")
     @CPF(message = "provide a valid CPF")
     private String cpf;
 
-    @NotBlank(message = "The customerName must be informed")
-    private String customerName;
-
-    @NotBlank(message = "The customerMail must be informed")
-    private String customerMail;
 }
