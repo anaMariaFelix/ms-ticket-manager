@@ -1,5 +1,6 @@
 package com.anamariafelix.ms_ticket_manager.controller;
 
+import com.anamariafelix.ms_ticket_manager.dto.TicketBuyCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketResponseDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketUpdateDTO;
@@ -25,6 +26,14 @@ public class TicketController {
     public ResponseEntity<TicketResponseDTO> create(@RequestBody @Valid TicketCreateDTO ticketCreateDTO){
 
         Ticket ticket = ticketService.create(ticketCreateDTO);
+
+        return ResponseEntity.status(201).body(toTicketDTO(ticket));
+    }
+
+    @PostMapping("/buy-ticket")
+    public ResponseEntity<TicketResponseDTO> buyTicket(@RequestBody @Valid TicketBuyCreateDTO ticketBuyCreateDTO){
+
+        Ticket ticket = ticketService.buyTicket(ticketBuyCreateDTO);
 
         return ResponseEntity.status(201).body(toTicketDTO(ticket));
     }
