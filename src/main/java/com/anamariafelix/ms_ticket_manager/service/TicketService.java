@@ -2,15 +2,16 @@ package com.anamariafelix.ms_ticket_manager.service;
 
 import com.anamariafelix.ms_ticket_manager.client.EventClientOpenFeign;
 import com.anamariafelix.ms_ticket_manager.client.dto.EventDTO;
+import com.anamariafelix.ms_ticket_manager.dto.TicketBuyCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketUpdateDTO;
-import com.anamariafelix.ms_ticket_manager.exception.EventNotFoundException;
-import com.anamariafelix.ms_ticket_manager.exception.OpenFeignConectionException;
-import com.anamariafelix.ms_ticket_manager.exception.TicketNotFoundException;
-import com.anamariafelix.ms_ticket_manager.exception.UnableToUpdateTicketexception;
+import com.anamariafelix.ms_ticket_manager.enums.Status;
+import com.anamariafelix.ms_ticket_manager.exception.*;
 import com.anamariafelix.ms_ticket_manager.model.Ticket;
+import com.anamariafelix.ms_ticket_manager.model.User;
 import com.anamariafelix.ms_ticket_manager.repository.TicketRepository;
 import feign.FeignException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import static com.anamariafelix.ms_ticket_manager.mapper.TicketMapper.toTicket;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
+    private final UserService userService;
     private final EventClientOpenFeign eventClientOpenFeign;
 
     @Transactional
@@ -47,6 +49,25 @@ public class TicketService {
         } catch (FeignException e) {
             throw new OpenFeignConectionException("Error communicating with event service.");
         }
+    }
+
+    @Transactional
+    public Ticket buyTicket(@Valid TicketBuyCreateDTO ticketBuyCreateDTO) {
+
+            Ticket ticket = fidById(ticketBuyCreateDTO.getTicketId());
+
+            if(ticket.getStatus().equals(Status.COMPLETED)){
+                throw new TicketUnavailableException("Ticket unavailable! Already sold!");
+            }
+
+            User client = userService.findByCpf(ticketBuyCreateDTO.getCpf());
+
+            ticket.setCpf(client.getCpf());
+            ticket.setCustomerName(client.getName());
+            ticket.setCustomerMail(client.getEmail());
+            ticket.setStatus(Status.COMPLETED);
+
+            return ticketRepository.save(ticket);
     }
 
     @Transactional(readOnly = true)
