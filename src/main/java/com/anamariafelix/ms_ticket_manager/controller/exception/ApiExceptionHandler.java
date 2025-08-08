@@ -2,6 +2,7 @@ package com.anamariafelix.ms_ticket_manager.controller.exception;
 
 import com.anamariafelix.ms_ticket_manager.exception.EventNotFoundException;
 import com.anamariafelix.ms_ticket_manager.exception.OpenFeignConectionException;
+import com.anamariafelix.ms_ticket_manager.exception.TicketNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,14 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(EventNotFoundException.class)
     public ResponseEntity<ErrorMessage> EventNotFoundException(EventNotFoundException e,HttpServletRequest request) {
+        log.error("Api Error - ", e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, e.getMessage()));
+    }
+
+    @ExceptionHandler(TicketNotFoundException.class)
+    public ResponseEntity<ErrorMessage> ticketNotFoundException(TicketNotFoundException e,HttpServletRequest request) {
         log.error("Api Error - ", e);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
