@@ -56,7 +56,7 @@ public class TicketService {
     }
 
     @Transactional(readOnly = true)
-    public List<Ticket> findByCpf(String cpf) {
+    public List<Ticket> findAllCpf(String cpf) {
         return ticketRepository.findByCpfAndDeletedFalse(cpf);
     }
 
@@ -76,6 +76,7 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+    @Transactional
     public void deleteTicket(String id) {
         Ticket ticket = ticketRepository.findByTicketIdAndDeletedFalse(id).orElseThrow(
                 () -> new TicketNotFoundException(String.format("Ticket with id = %s not found!", id)));
@@ -83,5 +84,21 @@ public class TicketService {
         ticket.setDeleted(true);
         ticket.setDeletedAt(LocalDateTime.now());
         ticketRepository.save(ticket);
+    }
+
+    @Transactional
+    public void deleteTicketByCpf(String cpf) {
+        List<Ticket> tickets = ticketRepository.findByCpfAndDeletedFalse(cpf);
+
+        tickets.forEach(t -> {
+            t.setDeleted(true);
+            t.setDeletedAt(LocalDateTime.now());
+            ticketRepository.save(t);
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ticket> findAllEventId(String eventId) {
+        return ticketRepository.findByEventIdAndDeletedFalse(eventId);
     }
 }
