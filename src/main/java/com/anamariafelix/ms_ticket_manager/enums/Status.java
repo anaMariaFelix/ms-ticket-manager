@@ -6,7 +6,7 @@ public enum Status {
 
     PENDING("pending"),
     COMPLETED("conpleted"),
-    CANCELED("canceled");
+    INACTIVE("inactive");
 
     private final String description;
 
