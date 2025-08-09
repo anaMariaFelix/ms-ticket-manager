@@ -1,6 +1,7 @@
 package com.anamariafelix.ms_ticket_manager.controller.docs;
 
 import com.anamariafelix.ms_ticket_manager.controller.exception.ErrorMessage;
+import com.anamariafelix.ms_ticket_manager.dto.TicketBuyCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,7 +9,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public interface TicketControllerDocs {
 
@@ -20,10 +23,10 @@ public interface TicketControllerDocs {
                     @ApiResponse(responseCode = "201", description = "Resource created successfully",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))),
 
-                    @ApiResponse(responseCode = "422", description = "Recurso não processado por falta de dados ou dados invalidos",
+                    @ApiResponse(responseCode = "422", description = "Appeal not processed due to lack of data or invalid data",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
 
-                    @ApiResponse(responseCode = "401", description = "Recurso não permito ao perfil de CLIENT",
+                    @ApiResponse(responseCode = "401", description = "Feature not allowed for CLIENT profile",
                             content = @Content(mediaType = " application/json;charset=UTF-8",schema = @Schema(implementation = ErrorMessage.class))),
 
                     @ApiResponse(responseCode = "404", description = "Event not found in event service.",
@@ -35,4 +38,28 @@ public interface TicketControllerDocs {
                     )
             })
     ResponseEntity<TicketResponseDTO> create(TicketCreateDTO ticketCreateDTO);
+
+
+    @Operation(summary = "Buy a ticket", description = "Resources for buy a new ticket." +
+            "Request requires the use of a bearer token. Access restricted to role='CLIENT'",
+            tags = {"Ticket"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Resource created successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "422", description = "Appeal not processed due to lack of data or invalid data",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "401", description = "Feature not allowed for ADMIN profile",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "404", description = "Ticket not found.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "409", description = "Ticket unavailable! Already sold!",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+            })
+    ResponseEntity<TicketResponseDTO> buyTicket(@RequestBody @Valid TicketBuyCreateDTO ticketBuyCreateDTO);
 }
