@@ -1,9 +1,11 @@
 package com.anamariafelix.ms_ticket_manager.controller;
 
+import com.anamariafelix.ms_ticket_manager.controller.docs.UserControllerDocs;
 import com.anamariafelix.ms_ticket_manager.dto.UserCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.UserResponseDTO;
 import com.anamariafelix.ms_ticket_manager.model.User;
 import com.anamariafelix.ms_ticket_manager.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,8 @@ import static com.anamariafelix.ms_ticket_manager.mapper.UserMapper.toUserDTO;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/user")
-public class UserController {
+@Tag(name = "User", description = "Endpoint for Managing User")
+public class UserController implements UserControllerDocs {
 
     private final UserService userService;
 
