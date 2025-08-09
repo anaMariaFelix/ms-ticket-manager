@@ -133,4 +133,21 @@ public interface TicketControllerDocs {
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
     ResponseEntity<TicketResponseDTO> update(@PathVariable String id, @RequestBody @Valid TicketUpdateDTO ticketUpdateDTO);
+
+
+    @Operation(summary = "Delete ticket by ID", description = "Resources for Delete ticket by ID." +
+            "Request requires the use of a bearer token. Access restricted to role='ADMIN'",
+            tags = {"Ticket"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource created successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "401", description = "Feature not allowed for CLIENT profile",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "404", description = "Ticket not found.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
+    ResponseEntity<Void> deleteById(@PathVariable String id);
 }
