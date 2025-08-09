@@ -34,13 +34,13 @@ public class AuthenticationController {
         log.info("Login authentication process {}",dto.getEmail());
 
         try{
-            log.info("Login 1");
+            log.info("Log 1");
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
-            log.info("Login 2");
+            log.info("Log 2");
             authenticationManager.authenticate(authenticationToken);
-            log.info("Login 3");
+            log.info("Log 3");
             JwtToken token = userDetailsService.getTokenAuthenticated(dto.getEmail());
-            log.info("Login 4");
+            log.info("Log 4 role ");
             return ResponseEntity.ok(token);
 
         }catch(AuthenticationException e){

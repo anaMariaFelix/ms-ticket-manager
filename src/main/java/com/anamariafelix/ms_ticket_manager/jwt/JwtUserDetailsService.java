@@ -20,12 +20,12 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         User user = userService.findByEmail(email);
-
+        log.info("log role {}", user.getRole());
         return new JwtUserDetails(user);
     }
 
     public JwtToken getTokenAuthenticated(String email){
         User user = userService.findByEmail(email);
-        return JwtUtils.createToken(email, user.getRole().name().substring("Role_".length()));
+        return JwtUtils.createToken(email, user.getRole().name());
     }
 }
