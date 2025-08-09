@@ -11,7 +11,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserControllerDocs {
 
-    @Operation(summary = "Create a new user", description = "Resources for creating a new user\n",
+    @Operation(summary = "Create a new user", description = "Resources for creating a new user",
+            tags = {"User"},
             responses = {
                     @ApiResponse(responseCode = "201", description = "Resource created successfully",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),

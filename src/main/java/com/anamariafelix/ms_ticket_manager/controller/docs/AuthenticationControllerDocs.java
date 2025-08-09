@@ -12,7 +12,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface AuthenticationControllerDocs {
 
-    @Operation(summary = "Authenticate to the API", description = "Authentication features in the API", tags = {"authentication"},
+    @Operation(summary = "Authenticate to the API", description = "Authentication features in the API",
+            tags = {"authentication"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Authentication successful and return of a Bearer token",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
