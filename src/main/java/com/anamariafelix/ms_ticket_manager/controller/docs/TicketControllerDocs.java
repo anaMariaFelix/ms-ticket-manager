@@ -84,4 +84,18 @@ public interface TicketControllerDocs {
             })
     ResponseEntity<TicketResponseDTO> findById(@PathVariable String id);
 
+    @Operation(summary = "Retrieve all tickets for a customer",
+            description = "Request requires the use of a bearer token.",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource successfully located",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = TicketResponseDTO.class))
+                    ),
+                    @ApiResponse(responseCode = "401", description = "I do not allow the CLIENT to use the resource if the CPF provided is not their own CPF.",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = ErrorMessage.class))
+                    )
+            })
+    ResponseEntity<List<TicketResponseDTO>> findAllCpf(@PathVariable String cpf);
 }
