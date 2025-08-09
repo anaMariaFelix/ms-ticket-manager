@@ -5,13 +5,20 @@ import com.anamariafelix.ms_ticket_manager.dto.TicketBuyCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
 
 public interface TicketControllerDocs {
 
@@ -62,4 +69,19 @@ public interface TicketControllerDocs {
 
             })
     ResponseEntity<TicketResponseDTO> buyTicket(@RequestBody @Valid TicketBuyCreateDTO ticketBuyCreateDTO);
+
+
+    @Operation(summary = "Find a Ticket", description = "Resources to find a Ticket by ID." +
+            "Request requires the use of a bearer token. Access restricted to role='ADMIN'",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource successfully located",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = TicketResponseDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Ticket not found.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = TicketResponseDTO.class))),
+                    @ApiResponse(responseCode = "401", description = "Feature not allowed for CLIENT profile",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            })
+    ResponseEntity<TicketResponseDTO> findById(@PathVariable String id);
+
 }
