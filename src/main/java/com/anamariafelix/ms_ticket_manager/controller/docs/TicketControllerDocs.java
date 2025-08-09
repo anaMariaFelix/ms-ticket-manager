@@ -73,6 +73,7 @@ public interface TicketControllerDocs {
 
     @Operation(summary = "Find a Ticket", description = "Resources to find a Ticket by ID." +
             "Request requires the use of a bearer token. Access restricted to role='ADMIN'",
+            tags = {"Ticket"},
             security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource successfully located",
@@ -86,6 +87,7 @@ public interface TicketControllerDocs {
 
     @Operation(summary = "Retrieve all tickets for a customer",
             description = "Request requires the use of a bearer token.",
+            tags = {"Ticket"},
             security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource successfully located",
@@ -98,4 +100,15 @@ public interface TicketControllerDocs {
                     )
             })
     ResponseEntity<List<TicketResponseDTO>> findAllCpf(@PathVariable String cpf);
+
+
+    @Operation(summary = "Retrieve all tickets for a Event", description = "Resources for finding tickets by Event ID",
+            tags = {"Ticket"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource successfully located",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",
+                                    schema = @Schema(implementation = TicketResponseDTO.class))
+                    )
+            })
+    ResponseEntity<List<TicketResponseDTO>> findAllEventId(@PathVariable String eventId);
 }
