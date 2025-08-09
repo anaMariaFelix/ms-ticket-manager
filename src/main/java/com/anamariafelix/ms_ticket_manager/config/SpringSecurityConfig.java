@@ -22,6 +22,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 public class SpringSecurityConfig {
 
+    private static final String[] DOCUMENTATION_OPENAPI = {
+            "/swagger-ms-ticket-manager.html",
+            "/docs-ms-ticket-manager/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html", "/swagger-ui/**",
+            "/webjars/**", "/configuration/**", "/swagger-resources/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -32,6 +40,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "api/v1/user/create-user").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/v1/ticket/get-ticket-eventId/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll()
+                        .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
