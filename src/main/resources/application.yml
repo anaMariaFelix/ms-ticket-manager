@@ -19,3 +19,10 @@ feign:
     config:
       default:
         loggerLevel: full
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ms-ticket-manager.html
+  api-docs:
+    path: /docs-ms-ticket-manager
+  packages-to-scan: com.anamariafelix.ms_ticket_manager.controller
