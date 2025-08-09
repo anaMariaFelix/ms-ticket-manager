@@ -1,11 +1,13 @@
 package com.anamariafelix.ms_ticket_manager.controller;
 
+import com.anamariafelix.ms_ticket_manager.controller.docs.TicketControllerDocs;
 import com.anamariafelix.ms_ticket_manager.dto.TicketBuyCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketResponseDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketUpdateDTO;
 import com.anamariafelix.ms_ticket_manager.model.Ticket;
 import com.anamariafelix.ms_ticket_manager.service.TicketService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,8 @@ import static com.anamariafelix.ms_ticket_manager.mapper.TicketMapper.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/ticket")
-public class TicketController {
+@Tag(name = "Ticket", description = "Endpoints for Managing Tickets")
+public class TicketController implements TicketControllerDocs {
 
     private final TicketService ticketService;
 
