@@ -4,6 +4,7 @@ import com.anamariafelix.ms_ticket_manager.controller.exception.ErrorMessage;
 import com.anamariafelix.ms_ticket_manager.dto.TicketBuyCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketResponseDTO;
+import com.anamariafelix.ms_ticket_manager.dto.TicketUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
 
 public interface TicketControllerDocs {
 
@@ -111,4 +111,26 @@ public interface TicketControllerDocs {
                     )
             })
     ResponseEntity<List<TicketResponseDTO>> findAllEventId(@PathVariable String eventId);
+
+    @Operation(summary = "Update ticket", description = "Resources for Update ticket." +
+            "Request requires the use of a bearer token. Access restricted to role='ADMIN'",
+            tags = {"Ticket"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource created successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "422", description = "Appeal not processed due to lack of data or invalid data",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "401", description = "Feature not allowed for CLIENT profile",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "404", description = "Ticket not found.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "409", description = "Tickets that have been sold cannot be updated.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
+    ResponseEntity<TicketResponseDTO> update(@PathVariable String id, @RequestBody @Valid TicketUpdateDTO ticketUpdateDTO);
 }
