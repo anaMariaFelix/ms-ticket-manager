@@ -73,7 +73,7 @@ public class TicketController implements TicketControllerDocs {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete-ticket/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
         ticketService.deleteTicket(id);
         return ResponseEntity.noContent().build();
     }
