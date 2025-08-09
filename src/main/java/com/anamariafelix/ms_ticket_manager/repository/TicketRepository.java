@@ -14,6 +14,8 @@ public interface TicketRepository extends MongoRepository<Ticket,String> {
 
     List<Ticket> findByCpfAndDeletedFalse(String cpf);
 
+    Optional<Ticket> findByTicketIdAndCpfAndDeletedFalse(String id, String cpf);
+
     Optional<Ticket> findByTicketIdAndDeletedFalse(String id);
 
     @Query("{ 'deleted': false, 'event.id': ?0 }")

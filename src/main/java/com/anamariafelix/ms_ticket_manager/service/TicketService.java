@@ -104,18 +104,19 @@ public class TicketService {
 
         ticket.setDeleted(true);
         ticket.setDeletedAt(LocalDateTime.now());
+        ticket.setStatus(Status.INACTIVE);
         ticketRepository.save(ticket);
     }
 
     @Transactional
-    public void deleteTicketByCpf(String cpf) {
-        List<Ticket> tickets = ticketRepository.findByCpfAndDeletedFalse(cpf);
+    public void deleteTicketByTicketIdCpf(String cpf, String ticketId) {
+        Ticket ticket = ticketRepository.findByTicketIdAndCpfAndDeletedFalse(ticketId,cpf).orElseThrow(
+                () -> new TicketNotFoundException(String.format("Ticket with id = %s and cpf = %s not found!", cpf, ticketId)));
 
-        tickets.forEach(t -> {
-            t.setDeleted(true);
-            t.setDeletedAt(LocalDateTime.now());
-            ticketRepository.save(t);
-        });
+        ticket.setDeleted(true);
+        ticket.setDeletedAt(LocalDateTime.now());
+        ticket.setStatus(Status.INACTIVE);
+        ticketRepository.save(ticket);
     }
 
     @Transactional(readOnly = true)
