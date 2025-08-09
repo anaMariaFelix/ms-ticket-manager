@@ -9,6 +9,7 @@ import com.anamariafelix.ms_ticket_manager.service.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class TicketController {
 
     private final TicketService ticketService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create-ticket")
     public ResponseEntity<TicketResponseDTO> create(@RequestBody @Valid TicketCreateDTO ticketCreateDTO){
 
@@ -30,6 +32,7 @@ public class TicketController {
         return ResponseEntity.status(201).body(toTicketDTO(ticket));
     }
 
+    @PreAuthorize("hasAuthority('CLIENT')")
     @PostMapping("/buy-ticket")
     public ResponseEntity<TicketResponseDTO> buyTicket(@RequestBody @Valid TicketBuyCreateDTO ticketBuyCreateDTO){
 
@@ -39,11 +42,13 @@ public class TicketController {
     }
 
     @GetMapping("/get-ticket/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<TicketResponseDTO> findById(@PathVariable String id) {
         Ticket ticket = ticketService.fidById(id);
         return ResponseEntity.ok().body(toTicketDTO(ticket));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') OR #cpf == principal.cpf")
     @GetMapping("/get-ticket-cpf/{cpf}")
     public ResponseEntity<List<TicketResponseDTO>> findAllCpf(@PathVariable String cpf) {
         List<Ticket> tickets = ticketService.findAllCpf(cpf);
@@ -56,18 +61,21 @@ public class TicketController {
         return ResponseEntity.ok().body(toListTicketDTO(tickets));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update-ticket/{id}")
     public ResponseEntity<TicketResponseDTO> update(@PathVariable String id, @RequestBody @Valid TicketUpdateDTO ticketUpdateDTO) {
         Ticket ticket = ticketService.update(id, ticketUpdateDTO);
         return ResponseEntity.ok().body(toTicketDTO(ticket));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete-ticket/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         ticketService.deleteTicket(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') OR #cpf == principal.cpf")
     @DeleteMapping("/delete-ticket-cpf/{cpf}")
     public ResponseEntity<Void> deleteByCpf(@PathVariable String cpf) {
         ticketService.deleteTicketByCpf(cpf);
