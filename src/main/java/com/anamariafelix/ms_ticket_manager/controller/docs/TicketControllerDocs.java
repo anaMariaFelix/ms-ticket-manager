@@ -6,8 +6,6 @@ import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketResponseDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -149,5 +147,21 @@ public interface TicketControllerDocs {
                     @ApiResponse(responseCode = "404", description = "Ticket not found.",
                             content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
             })
-    ResponseEntity<Void> deleteById(@PathVariable String id);
+    ResponseEntity<Void> deleteById(String id);
+
+    @Operation(summary = "Delete ticket by CPF", description = "Resources for Delete ticket by CPF." +
+            "Request requires the use of a bearer token.",
+            tags = {"Ticket"},
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Resource created successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketResponseDTO.class))),
+
+                    @ApiResponse(responseCode = "401", description = "Feature not allowed for CLIENT profile",
+                            content = @Content(mediaType = " application/json;charset=UTF-8",schema = @Schema(implementation = ErrorMessage.class))),
+
+                    @ApiResponse(responseCode = "404", description = "Ticket not found.",
+                            content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+            })
+    ResponseEntity<Void> deleteByCpf(String cpf, String ticketId);
 }

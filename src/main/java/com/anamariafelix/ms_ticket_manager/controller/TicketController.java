@@ -80,7 +80,7 @@ public class TicketController implements TicketControllerDocs {
 
     @PreAuthorize("hasAuthority('ADMIN') OR #cpf == principal.cpf")
     @DeleteMapping("/delete-ticket-by-ticketId-cpf")
-    public ResponseEntity<Void> deleteByCpf(  @RequestParam String cpf, @RequestParam String ticketId) {
+    public ResponseEntity<Void> deleteByCpf(@RequestParam String cpf, @RequestParam String ticketId) {
         ticketService.deleteTicketByTicketIdCpf(cpf, ticketId);
         return ResponseEntity.noContent().build();
     }
