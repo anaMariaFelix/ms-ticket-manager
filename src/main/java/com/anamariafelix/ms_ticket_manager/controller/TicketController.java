@@ -7,9 +7,14 @@ import com.anamariafelix.ms_ticket_manager.dto.TicketResponseDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketUpdateDTO;
 import com.anamariafelix.ms_ticket_manager.model.Ticket;
 import com.anamariafelix.ms_ticket_manager.service.TicketService;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -53,9 +58,12 @@ public class TicketController implements TicketControllerDocs {
 
     @PreAuthorize("hasAuthority('ADMIN') OR #cpf == principal.cpf")
     @GetMapping("/get-ticket-cpf/{cpf}")
-    public ResponseEntity<List<TicketResponseDTO>> findAllCpf(@PathVariable String cpf) {
-        List<Ticket> tickets = ticketService.findAllCpf(cpf);
-        return ResponseEntity.ok().body(toListTicketDTO(tickets));
+    public ResponseEntity<Page<TicketResponseDTO>> findAllCpf(@Parameter(hidden = true) @PageableDefault(size = 5, sort = "eventName", direction = Sort.Direction.ASC) Pageable pageable, @PathVariable String cpf) {
+        Page<Ticket> tickets = ticketService.findAllCpf(pageable,cpf);
+
+        Page<TicketResponseDTO> ticketResponseDTOPage = tickets.map(ticket -> toTicketDTO(ticket));
+
+        return ResponseEntity.ok().body(ticketResponseDTOPage);
     }
 
     @GetMapping("/get-ticket-eventId/{eventId}")

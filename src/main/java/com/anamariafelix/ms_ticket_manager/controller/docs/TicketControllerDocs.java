@@ -6,16 +6,22 @@ import com.anamariafelix.ms_ticket_manager.dto.TicketCreateDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketResponseDTO;
 import com.anamariafelix.ms_ticket_manager.dto.TicketUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
 
 
 public interface TicketControllerDocs {
@@ -87,6 +93,19 @@ public interface TicketControllerDocs {
             description = "Request requires the use of a bearer token.",
             tags = {"Ticket"},
             security = @SecurityRequirement(name = "security"),
+            parameters = {
+                    @Parameter(in = QUERY, name = "page",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
+                            description = "Represents the returned page"
+                    ),
+                    @Parameter(in = QUERY, name = "size",
+                            content = @Content(schema = @Schema(type = "integer", defaultValue = "20")),
+                            description = "Represents the total number of elements per page"
+                    ),
+                    @Parameter(in = QUERY, name = "sort", hidden = true,
+                            array = @ArraySchema(schema = @Schema(type = "string", defaultValue = "nome,asc")),
+                            description = "Represents the ordering of the results. Multiple sorting criteria are supported.")
+            },
             responses = {
                     @ApiResponse(responseCode = "200", description = "Resource successfully located",
                             content = @Content(mediaType = " application/json;charset=UTF-8",
@@ -97,7 +116,7 @@ public interface TicketControllerDocs {
                                     schema = @Schema(implementation = ErrorMessage.class))
                     )
             })
-    ResponseEntity<List<TicketResponseDTO>> findAllCpf(@PathVariable String cpf);
+    ResponseEntity<Page<TicketResponseDTO>> findAllCpf(Pageable pageable, String cpf);
 
 
     @Operation(summary = "Retrieve all tickets for a Event", description = "Resources for finding tickets by Event ID",

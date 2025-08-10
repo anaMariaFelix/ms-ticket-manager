@@ -11,9 +11,10 @@ import com.anamariafelix.ms_ticket_manager.model.Ticket;
 import com.anamariafelix.ms_ticket_manager.model.User;
 import com.anamariafelix.ms_ticket_manager.repository.TicketRepository;
 import feign.FeignException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +53,7 @@ public class TicketService {
     }
 
     @Transactional
-    public Ticket buyTicket(@Valid TicketBuyCreateDTO ticketBuyCreateDTO) {
+    public Ticket buyTicket(TicketBuyCreateDTO ticketBuyCreateDTO) {
 
             Ticket ticket = fidById(ticketBuyCreateDTO.getTicketId());
 
@@ -77,8 +78,13 @@ public class TicketService {
     }
 
     @Transactional(readOnly = true)
-    public List<Ticket> findAllCpf(String cpf) {
-        return ticketRepository.findByCpfAndDeletedFalse(cpf);
+    public Page<Ticket> findAllCpf(Pageable pageable,String cpf) {
+        return ticketRepository.findByCpfAndDeletedFalse(pageable,cpf);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ticket> findAllEventId(String eventId) {
+        return ticketRepository.findByEventIdAndDeletedFalse(eventId);
     }
 
     @Transactional
@@ -117,10 +123,5 @@ public class TicketService {
         ticket.setDeletedAt(LocalDateTime.now());
         ticket.setStatus(Status.INACTIVE);
         ticketRepository.save(ticket);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Ticket> findAllEventId(String eventId) {
-        return ticketRepository.findByEventIdAndDeletedFalse(eventId);
     }
 }
