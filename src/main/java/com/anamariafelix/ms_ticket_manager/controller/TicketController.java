@@ -52,7 +52,7 @@ public class TicketController implements TicketControllerDocs {
     @GetMapping("/get-ticket/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<TicketResponseDTO> findById(@PathVariable String id) {
-        Ticket ticket = ticketService.fidById(id);
+        Ticket ticket = ticketService.findById(id);
         return ResponseEntity.ok().body(toTicketDTO(ticket));
     }
 

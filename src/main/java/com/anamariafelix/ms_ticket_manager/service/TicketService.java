@@ -41,6 +41,7 @@ public class TicketService {
             Ticket ticket = toTicket(ticketCreateDTO);
 
             ticket.setEvent(toEvent(event));
+            ticket.setStatus(Status.PENDING);
 
             return ticketRepository.save(ticket);
 
@@ -55,7 +56,7 @@ public class TicketService {
     @Transactional
     public Ticket buyTicket(TicketBuyCreateDTO ticketBuyCreateDTO) {
 
-            Ticket ticket = fidById(ticketBuyCreateDTO.getTicketId());
+            Ticket ticket = findById(ticketBuyCreateDTO.getTicketId());
 
             if(ticket.getStatus().equals(Status.COMPLETED)){
                 throw new TicketUnavailableException("Ticket unavailable! Already sold!");
@@ -72,7 +73,7 @@ public class TicketService {
     }
 
     @Transactional(readOnly = true)
-    public Ticket fidById(String id){
+    public Ticket findById(String id){
         return ticketRepository.findByTicketIdAndDeletedFalse(id).orElseThrow(
                 () -> new TicketNotFoundException(String.format("Ticket with id = %s not found!", id)));
     }
@@ -89,10 +90,9 @@ public class TicketService {
 
     @Transactional
     public Ticket update(String id, TicketUpdateDTO ticketUpdate) {
-        Ticket ticket = fidById(id);
+        Ticket ticket = findById(id);
 
         if (ticket.getCpf() == null) {
-            ticket.setStatus(ticketUpdate.getStatus());
             ticket.setUSDTotalAmount(ticketUpdate.getUsdTotalAmount());
             ticket.setBRLTotalAmount(ticketUpdate.getBrlTotalAmount());
 

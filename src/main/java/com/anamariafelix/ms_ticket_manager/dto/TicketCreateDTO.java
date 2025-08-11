@@ -1,9 +1,6 @@
 package com.anamariafelix.ms_ticket_manager.dto;
 
-
-import com.anamariafelix.ms_ticket_manager.enums.Status;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
@@ -21,7 +18,4 @@ public class TicketCreateDTO {
 
     @NotBlank(message = "The USDTotalAmount must be informed")
     private String usdTotalAmount;
-
-    @NotNull(message = "The USDTotalAmount must be informed")
-    private Status status;
 }
