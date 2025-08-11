@@ -116,7 +116,6 @@ public class TicketServiceTest {
     }
 
     //Buy Ticket
-
     @Test
     void buyTicket_ShouldCompleteTicket_WhenTicketIsPending() {
         TicketBuyCreateDTO dto = new TicketBuyCreateDTO();
@@ -283,20 +282,17 @@ public class TicketServiceTest {
 
     @Test
     void update_ShouldThrowException_WhenTicketSold() {
-        // Arrange
         String ticketId = "ticket123";
         Ticket ticket = new Ticket();
         ticket.setTicketId(ticketId);
-        ticket.setCpf("12345678901"); // já vendido
+        ticket.setCpf("12345678901");
 
         TicketUpdateDTO dto = new TicketUpdateDTO();
         dto.setUsdTotalAmount("150.00");
         dto.setBrlTotalAmount("750.00");
 
-        // Mock findById para retornar o ticket
         when(ticketRepository.findByTicketIdAndDeletedFalse(ticketId)).thenReturn(Optional.of(ticket));
 
-        // Act & Assert
         UnableToUpdateTicketexception ex = assertThrows(UnableToUpdateTicketexception.class, () -> {
             ticketService.update(ticketId, dto);
         });
@@ -371,7 +367,6 @@ public class TicketServiceTest {
 
         when(ticketRepository.findByTicketIdAndCpfAndDeletedFalse(ticketId, cpf)).thenReturn(Optional.empty());
 
-        // Act & Assert
         TicketNotFoundException ex = assertThrows(TicketNotFoundException.class, () -> {
             ticketService.deleteTicketByTicketIdCpf(cpf, ticketId);
         });
