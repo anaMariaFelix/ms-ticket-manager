@@ -34,7 +34,7 @@ public class UserServiceTest {
     @Test
     void create_ShouShouldEncodePasswordAndSaveUser_WhenEmailNotExists() {
         User user = new User();
-        user.setEmail("userTest@example.com");
+        user.setEmail("userTest@gmail.com");
         user.setPassword("123456");
 
         String encodedPassword = "encoded123456";
@@ -52,7 +52,7 @@ public class UserServiceTest {
     @Test
     void create_ShouldThrowUniqueViolationException_WhenDuplicateKey() {
         User user = new User();
-        user.setEmail("emailduplicate@example.com");
+        user.setEmail("emailduplicate@gmail.com");
         user.setPassword("123456");
 
         when(passwordEncoder.encode("123456")).thenReturn("encoded");
@@ -70,28 +70,28 @@ public class UserServiceTest {
     @Test
     void findByEmail_ShouldReturnUser_WhenEmailExists() {
         User user = new User();
-        user.setEmail("exists@email.com");
+        user.setEmail("exists@gmail.com");
 
         when(userRepository.findByEmail("exists@email.com")).thenReturn(user);
 
         User foundUser = userService.findByEmail("exists@email.com");
 
         assertNotNull(foundUser);
-        assertEquals("exists@email.com", foundUser.getEmail());
+        assertEquals("exists@gmail.com", foundUser.getEmail());
         verify(userRepository, times(1)).findByEmail("exists@email.com");
     }
 
     @Test
     void findByCpf_ShouldReturnUser_WhenCpfExists() {
         User user = new User();
-        user.setEmail("cpf@email.com");
+        user.setEmail("cpf@gmail.com");
 
         when(userRepository.findByCpf("12345678900")).thenReturn(Optional.of(user));
 
         User foundUser = userService.findByCpf("12345678900");
 
         assertNotNull(foundUser);
-        assertEquals("cpf@email.com", foundUser.getEmail());
+        assertEquals("cpf@gmail.com", foundUser.getEmail());
         verify(userRepository, times(1)).findByCpf("12345678900");
     }
 

@@ -31,7 +31,7 @@ class JwtUserDetailsServiceTest {
     @Test
     void loadUserByUsername_shouldReturnUserDetails_whenUserExists() {
 
-        String email = "user@example.com";
+        String email = "user@gmail.com";
         User user = new User();
         user.setEmail(email);
         user.setPassword("123456");
@@ -52,7 +52,7 @@ class JwtUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_shouldThrowUsernameNotFoundException_whenUserNotFound() {
-        String email = "notfound@example.com";
+        String email = "notfound@gmail.com";
 
         when(userService.findByEmail(email)).thenThrow(new UsernameNotFoundException("User not found"));
 
@@ -65,7 +65,7 @@ class JwtUserDetailsServiceTest {
 
     @Test
     void getTokenAuthenticated_shouldReturnJwtToken_whenUserExists() {
-        String email = "tokenuser@example.com";
+        String email = "tokenuser@gmail.com";
         User user = new User();
         user.setEmail(email);
         user.setRole(Role.ADMIN);
