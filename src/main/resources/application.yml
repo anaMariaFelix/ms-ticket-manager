@@ -3,7 +3,7 @@ spring:
     name: ms-ticket-manager
   data:
     mongodb:
-      uri: mongodb+srv://admin:admin@clusterevent.7ysylg7.mongodb.net/?retryWrites=true&w=majority&appName=ClusterEvent
+      uri: ${URI_DATA_BASE}
       database: db_ticket
       auto-index-creation: true
 
